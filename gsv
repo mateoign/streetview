@@ -94,10 +94,9 @@ def capture_street_view_image(location, size="600x400", heading=0, pitch=0, fov=
     response = requests.get(signature)
     if response.status_code == 200:
         image = Image.open(BytesIO(response.content))
-        image.save("/Users/mateo/dsc180a-streetview/data/images/street_view_image.jpg")  # Save the image to a file
+        image.save("/Users/mateo/dsc180a-streetview/data/images/street_view_image{}.jpg".format(time.time()))  # Save the image to a file
         image.show()  # Display the image
     else:
         print("Failed to capture Street View image.")
         print(f"Status Code: {response.status_code}")
         print(response.text)
-        
