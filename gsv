@@ -1,1 +1,102 @@
+# %load /Users/mateo/dsc180a-streetview/gsv
+#for digital signature and api key from .env file
+import os
+from sys import api_version
 from dotenv import load_dotenv
+#for google street view image requests
+import requests
+from PIL import Image
+from io import BytesIO
+# for generating a key
+import hashlib
+import hmac
+import base64
+load_dotenv()
+# api key and digital signature variables
+api_key = os.getenv('api_key')
+digi_sig = os.getenv('digi_sig')
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+""" Signs a URL using a URL signing secret """
+
+import hashlib
+import hmac
+import base64
+import urllib.parse as urlparse
+
+
+def sign_url(input_url=None, secret=None):
+#     """ Sign a request URL with a URL signing secret.
+#       Usage:
+#       from urlsigner import sign_url
+#       signed_url = sign_url(input_url=my_url, secret=SECRET)
+#       Args:
+#       input_url - The URL to sign
+#       secret    - Your URL signing secret
+#       Returns:
+#       The signed request URL
+#   """
+
+    if not input_url or not secret:
+        raise Exception("Both input_url and secret are required")
+
+    url = urlparse.urlparse(input_url)
+
+    # We only need to sign the path+query part of the string
+    url_to_sign = url.path + "?" + url.query
+
+    # Decode the private key into its binary format
+    # We need to decode the URL-encoded private key
+    decoded_key = base64.urlsafe_b64decode(secret)
+
+    # Create a signature using the private key and the URL-encoded
+    # string using HMAC SHA1. This signature will be binary.
+    signature = hmac.new(decoded_key, str.encode(url_to_sign), hashlib.sha1)
+
+    # Encode the binary signature into base64 for use within a URL
+    encoded_signature = base64.urlsafe_b64encode(signature.digest())
+
+    original_url = url.scheme + "://" + url.netloc + url.path + "?" + url.query
+
+    # Return signed URL
+    return original_url + "&signature=" + encoded_signature.decode()
+
+
+# if __name__ == "__main__":
+#     input_url = input("URL to Sign: ")
+#     secret = input("URL signing secret: ")
+#     print("Signed URL: " + sign_url(input_url, secret))
+
+def generate_signature(secret_key, url):
+    # Create a signature using HMAC-SHA1
+    signature = hmac.new(secret_key.encode('utf-8'), url.encode('utf-8'), hashlib.sha1)
+    return base64.urlsafe_b64encode(signature.digest()).decode('utf-8')
+
+def capture_street_view_image(location, size="600x400", heading=0, pitch=0, fov=90, api_key=api_key, secret_key = digi_sig):
+    base_url = "https://maps.googleapis.com/maps/api/streetview"
+    params = {
+        "location": location,  # Latitude and Longitude of the location
+        "size": size,  # image size in pixels 
+        "heading": heading,  # The compass heading (0 to 360 degrees)
+        "pitch": pitch,  # The up or down angle (default is 0)
+        "fov": fov,  # The field of view in degrees (default is 90)
+        "key": api_key,  # Your Google API key
+    }
+    # Construct the URL with the parameters
+    url = f"{base_url}?"
+    for key, value in params.items():
+        url += f"{key}={value}&"
+    url = url.rstrip('&')  # Remove the trailing '&'
+
+    # Generate and add the signature to the URL
+    signature = sign_url(url, secret_key)
+    #signature = generate_signature(secret_key, url)
+    response = requests.get(signature)
+    if response.status_code == 200:
+        image = Image.open(BytesIO(response.content))
+        image.save("/Users/mateo/dsc180a-streetview/data/images/street_view_image.jpg")  # Save the image to a file
+        image.show()  # Display the image
+    else:
+        print("Failed to capture Street View image.")
+        print(f"Status Code: {response.status_code}")
+        print(response.text)
