@@ -100,3 +100,4 @@ def capture_street_view_image(location, size="600x400", heading=0, pitch=0, fov=
         print("Failed to capture Street View image.")
         print(f"Status Code: {response.status_code}")
         print(response.text)
+        
