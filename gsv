@@ -1,7 +1,7 @@
 # %load /Users/mateo/dsc180a-streetview/gsv
 #for digital signature and api key from .env file
 import os
-from sys import api_version
+from time import time
 from dotenv import load_dotenv
 #for google street view image requests
 import requests
