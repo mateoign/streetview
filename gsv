@@ -1,7 +1,7 @@
 # %load /Users/mateo/dsc180a-streetview/gsv
 #for digital signature and api key from .env file
 import os
-from time import time
+import time
 from dotenv import load_dotenv
 #for google street view image requests
 import requests
@@ -60,12 +60,6 @@ def sign_url(input_url=None, secret=None):
 
     # Return signed URL
     return original_url + "&signature=" + encoded_signature.decode()
-
-
-# if __name__ == "__main__":
-#     input_url = input("URL to Sign: ")
-#     secret = input("URL signing secret: ")
-#     print("Signed URL: " + sign_url(input_url, secret))
 
 def generate_signature(secret_key, url):
     # Create a signature using HMAC-SHA1
