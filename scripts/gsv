@@ -13,8 +13,8 @@ import hmac
 import base64
 load_dotenv()
 # api key and digital signature variables
-api_key = os.getenv('api_key')
-digi_sig = os.getenv('digi_sig')
+api_key = os.getenv('API_KEY')
+digi_sig = os.getenv('SECRET')
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """ Signs a URL using a URL signing secret """
@@ -61,7 +61,7 @@ def sign_url(input_url=None, secret=None):
     # Return signed URL
     return original_url + "&signature=" + encoded_signature.decode()
 
-def capture_street_view_image(location, size="600x400", heading=0, pitch=0, fov=90, api_key=api_key, secret_key = digi_sig):
+def capture_street_view_image(location, size="600x400", pitch=0, heading=0, fov=90, output = 'data/images/', api_key=api_key, secret_key = digi_sig):
     base_url = "https://maps.googleapis.com/maps/api/streetview"
     params = {
         "location": location,  # Latitude and Longitude of the location
