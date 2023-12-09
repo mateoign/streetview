@@ -16,13 +16,13 @@
   },
   "categories": [
     {
-      "id": 0,
-      "name": "surface structure",
+      "id": 2,
+      "name": "UG",
       "supercategory": ""
     },
     {
       "id": 1,
-      "name": "pole",
+      "name": "OH",
       "supercategory": ""
     }
   ],
