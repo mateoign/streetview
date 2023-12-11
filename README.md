@@ -1,18 +1,11 @@
-# DSC180A Google Street View 
-This is the first part of the senior capstone. This project uses Google Street View to collect the images for the dataset. In conjuction with labellbox the images uses object detection to train a DeTr HuggingFace model to label SDG&E equipment such as poles and transformers. 
+# Google Street View To Detect Wildfire Risks
+This is the first part of the senior capstone. This project uses Google Street View to collect the images for the dataset. In conjuction with labellbox the images uses object detection to train a DeTr HuggingFace model to label SDG&E equipment such as poles and transformers. First we needed to collect images and our section leader helped us out with this [jupyter notebook](https://github.com/pdashk/streetwatch/tree/master). The following instructions and information was important to the project but it does not need to be repilcated to see the final model.
+
+# Object Detection Model
+Upload the [finetune_detr notebook](https://github.com/mjignacio/dsc180a-streetview/blob/main/notebooks/finetune_detr.ipynb) in a [Google Colab](https://colab.research.google.com) or use an environment with a NVIDIA gpu as it requires cuda cores to run. Then run through it and observe the results.
 
 ## Data Sources
-Data for this project is collected from [Google Street View Static API](https://developers.google.com/maps/documentation/streetview/overview). 
-
-To run sunny.py, you need specifically structured JSON file. The JSON file will have 2 main item(OH and UG) and each should be the list of 5 different pole and within each pole, there should be 'loc' for lat and long 'heading' for heading direction of the image.
-
-### Additional Files
-
-Add various files located in the HDSI Capstone 2023-2024 Sharepoint Documents/Data folder to the data directory. This is needed in order to run `scripts/collect_images.py`:
-* `joshua_structures.json`
-* `kevin_structures.json`
-* `jonathan_structures.json`
-* `structure_coordinates.json`
+Data for this project is collected from [Google Street View Static API](https://developers.google.com/maps/documentation/streetview/overview).
 
 ## Setup
 
@@ -25,11 +18,12 @@ conda env create -f environment.yml
 ### Credentials
 Store credentials in `.env` file and load using [python-dotenv](https://pypi.org/project/python-dotenv/).
 
-### Training Data
+### Training Data (DISCLAIMER since I've already collected the data you do not need to run this)
 Create training data by running the following after setup is complete:
 ```
 python scripts/collect_images.py
 ```
+You do not need to run this I just included this to show that it was necessary for the 
 
 # Project Structure
 
@@ -49,14 +43,14 @@ python scripts/collect_images.py
 └── README.md           <- The top-level README for repo
 ```
 
-Open the [finetune_detr notebook](https://github.com/mjignacio/dsc180a-streetview/blob/main/notebooks/finetune_detr.ipynb)
 # Part 1 Collection and Labelling
 
-## Image collection 
-Using the Google Street View api I acquired imgages of 5 transformers and 5 poles from around San Diego at different zooms and angles totaling in 150 images. I wrote the script in a Jupyter notebook and that includes functions that call the api to collect, name, and save images. Including supplementary functions that allow the image to be properly attained using a digital signature.
-## Labeling and Object Detection
-After collecting the images I used labellbox to classify the fixtures for detection as poles or underground structures. 
+## Image Collection and Labeling
+Using the Google Street View api I acquired imgages of 5 transformers and 5 poles from around San Diego at different zooms and angles totaling in 150 images. Then wrote a script in a Jupyter Notebook that uses the api to collect, name, and save images. Including supplementary functions that allow the image to be properly attained using a digital signature. After collecting the images I used [Labelbox](https://labelbox.com) to classify the fixtures for detection as poles or underground structures. The image collection python files and COCOjson annotations were compiled on our domain website and I used them to train my models. They are included just for show because they were important but are not necessary to recreate the finetune_detr notebook.
 
 # Part 2 Fine tuning A DeTr Model and Collaboration
+Using the detection transformer model, based on Woctezuma's repository, I used multiple image collection scripts to finetune the model. The train2017.zip and custom_train.json files uses kelly.py and kelly.json made by Kelly Park and the val2017.zip and custom_val.json files use alex.py and alex.json made by Alex Denny. The train2017_large.zip file was made from the image collection scripts of Kelly Park, Sunny Kim, Alex Denny, and Phi Nguyen and the cooinciding "large" annotation file were also made with their work, while slightly modified. Additionaly the val2017_large.zip file was made with Noel Molina and Joshua Chuang's work with the matching annotation json file as well. 
 
+# Object Detection Model Restated
+Upload the [finetune_detr notebook](https://github.com/mjignacio/dsc180a-streetview/blob/main/notebooks/finetune_detr.ipynb) in a [Google Colab](https://colab.research.google.com) or use an environment with a NVIDIA gpu as it requires cuda cores to run. Then run through it and observe the results.
 ## 
