@@ -1,4 +1,4 @@
-name: dsc180a
+name: streetwatch
 channels:
   - conda-forge
   - defaults

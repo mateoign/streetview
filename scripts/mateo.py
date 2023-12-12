@@ -61,7 +61,7 @@ def sign_url(input_url=None, secret=None):
     # Return signed URL
     return original_url + "&signature=" + encoded_signature.decode()
 
-def capture_street_view_image(location, size="600x400", pitch=0, heading=0, fov=90, output = 'data/images/', api_key=api_key, secret_key = digi_sig):
+def capture_street_view_image(location, size="600x400", pitch=0, heading=0, fov=90, outpath = 'data/images/', api_key=api_key, secret_key = digi_sig):
     base_url = "https://maps.googleapis.com/maps/api/streetview"
     params = {
         "location": location,  # Latitude and Longitude of the location
@@ -80,10 +80,16 @@ def capture_street_view_image(location, size="600x400", pitch=0, heading=0, fov=
     # Generate and add the signature to the URL
     signature = sign_url(url, secret_key)
     response = requests.get(signature)
-    if response.status_code == 200:
-        image = Image.open(BytesIO(response.content))
-        image.save(outpath + "../data/images/street_view_image{}.jpg".format(time.time()))  # Save the image to a file
-        image.show()  # Display the image
+    if not os.path.exists(outpath):
+        os.makedirs(outpath, exist_ok=True)
+    if (response.status_code == 200):
+        file_path = outpath+"street_view_image{}.jpg".format(time.time())
+        with open(file_path, "wb") as file:
+            file.write(response.content)
+        response.close()
+        # if you want to see the image, uncomment this portion
+        #image = Image.open(BytesIO(response.content))
+        #image.show()
     else:
         print("Failed to capture Street View image.")
         print(f"Status Code: {response.status_code}")
@@ -166,7 +172,7 @@ def generate_images(outpath):
     ["32.8704883,-117.206585", '600x400',0, 80, 10],
     ["32.8704883,-117.206585", '600x400',0, 80, 20],
     ["32.8704883,-117.206085", '600x400', 0, 120, 60],
-    ["[32.8704883,-117.206085", '600x400', 0, 120, 45],
+    ["32.8704883,-117.206085", '600x400', 0, 120, 45],
     ["32.8704883,-117.206085", '600x400', 0, 110, 30],
     ["32.8704883,-117.2058585", '600x400', 0, 120, 60],
     ["32.8704883,-117.2058585", '600x400', 0, 120, 50],
@@ -209,9 +215,9 @@ def generate_images(outpath):
     ["32.75377,-117.132", '600x400',0,350,100],
     ["32.75377,-117.132", '600x400',0,350,120],
     ["32.75377,-117.132", '600x400',0,350,60],
-    ["32.75371,-117.132",'600x400',0,100],
-    ["32.75371,-117.132",'600x400',0,60],
-    ["32.75371,-117.132",'600x400',350,30]]
+    ["32.75371,-117.132",'600x400',0,0,100],
+    ["32.75371,-117.132",'600x400',0,0,60],
+    ["32.75371,-117.132",'600x400',0,350,30]]
 
 
     # Eigth
@@ -270,8 +276,8 @@ def generate_images(outpath):
 
     for structure in structures:
         for parama in structure:
-            capture_street_view_image(parama[0], parama[1], parama[2], parama[3], parama[4])
+            capture_street_view_image(parama[0], parama[1], parama[2], parama[3], parama[4], outpath)
        
 
 if __name__== "__main__":
-    generate_images()
+    generate_images(outpath='data/images/')

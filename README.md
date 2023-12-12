@@ -1,11 +1,12 @@
 # Google Street View To Detect Wildfire Risks
-This is the first part of the senior capstone. This project uses Google Street View to collect the images for the dataset. In conjuction with labellbox the images uses object detection to train a DeTr HuggingFace model to label SDG&E equipment such as poles and transformers. First we needed to collect images and our section leader helped us out with this [jupyter notebook](https://github.com/pdashk/streetwatch/tree/master). The following information, until the "Part 1" title, were important to the project but it does not need to be repilcated to see the final model.
+San Diego Gas and Electric 
+This project uses Google Street View to collect the images for the dataset. In conjuction with Labelbox for class annotations, I used the images to train a Detection Transformer HuggingFace model to label SDG&E equipment such as poles and transformers. First we needed to collect images and our section leader helped us out with this [jupyter notebook](https://github.com/pdashk/streetwatch/tree/master). This exhibited in the conda environment and training data sections. 
 
-# Object Detection Model for Grading
+# Object Detection Model
 Upload the [finetune_detr notebook](https://github.com/mjignacio/dsc180a-streetview/blob/main/notebooks/finetune_detr.ipynb) in a [Google Colab](https://colab.research.google.com) or use an environment with a NVIDIA gpu as it requires cuda cores to run. Then run through it and observe the results. This is the final form of the model but there is so much more information that it took to get here which is why there are so many extra files and info on this readme.
 
 ## Data Sources
-Data for this project is collected from [Google Street View Static API](https://developers.google.com/maps/documentation/streetview/overview).
+Data for this project is collected from [Google Street View Static API](https://developers.google.com/maps/documentation/streetview/overview). If you want to run my file to check that it works, clone my GitHub then do the following.
 
 ## Setup
 
@@ -13,6 +14,21 @@ Data for this project is collected from [Google Street View Static API](https://
 After cloning repo, navigating to root level and run:
 ```
 conda env create -f environment.yml
+conda activate streetwatch
+```
+I'm not sure why, but on my last run through I found an issue where the dotenv and pillow packages that looks like:
+```
+ERROR: Could not find a version that satisfies the requirement torch (from versions: none)
+ERROR: No matching distribution found for torch
+
+failed
+
+CondaEnvException: Pip failed
+```
+If this occurs do these two pip installs:
+```
+pip install requests pillow
+pip install python-dotenv  
 ```
 
 ### Credentials
@@ -23,7 +39,11 @@ Create training data by running the following after setup is complete:
 ```
 python scripts/collect_images.py
 ```
-You do not need to run this I just included this to show that it was necessary for the 
+or run this to see my individual python file
+```
+python scripts/mateo.py
+```
+
 
 # Project Structure
 
@@ -45,10 +65,10 @@ You do not need to run this I just included this to show that it was necessary f
 
 # Part 1 Collection and Labelling
 
-## Image Collection and Labeling
+## Image Collection and Labeling Details
 Using the Google Street View api I acquired imgages of 5 transformers and 5 poles from around San Diego at 3 different zooms and 5 angles totaling in 150 images. Then wrote a script in a Jupyter Notebook that uses the api to collect, name, and save images. Including supplementary functions that allow the image to be properly attained using a digital signature. After collecting the images I used [Labelbox](https://labelbox.com) to classify the fixtures for detection as poles or underground structures.
 
-The image collection python files and COCOjson annotations were compiled on our domain website and I used some of them to train my models. They are included just for show because they were important but are not necessary to recreate the finetune_detr notebook. 
+The image collection python files and COCOjson annotations were compiled on our domain website and I used some of them to train my models. They are included just for show because they were important and I created my images from the collect_images.py file but are not necessary to recreate the finetune_detr notebook. 
 
 # Part 2 Fine tuning A DeTr Model and Collaboration
 With a detection transformer model, based on Woctezuma's repository, I used multiple image collection scripts to finetune the model. I adjusted the code of Woctezuma's original notebook to pull the files from my repository and use the Google Street View Images as the dataset with their accompanying COCOjson annotations. To combine the json files into one file for the model, I found [this](https://github.com/mohamadmansourX/Merge_COCO_FILES) repository. 
