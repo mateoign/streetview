@@ -1,5 +1,6 @@
 # Google Street View To Detect Wildfire Risks
-San Diego Gas and Electric 
+San Diego Gas & Electric leverages many different public and private data sources to make critical decisions that impact our communities. We would like to explore Google Street View as a publicly available source of data to help us identify risks that can be observed from the perspective of San Diego citizens. The project goals are to quantify the ability to observe damaged assets or fire from commonly traveled paths, determine whether there are clear compliance infractions that can be seen from the citizen's perspective, and identify other utility-related hazards that can be seen from this public data source.
+
 This project uses Google Street View to collect the images for the dataset. In conjuction with Labelbox for class annotations, I used the images to train a Detection Transformer HuggingFace model to label SDG&E equipment such as poles and transformers. First we needed to collect images and our section leader helped us out with this [jupyter notebook](https://github.com/pdashk/streetwatch/tree/master). This exhibited in the conda environment and training data sections. 
 
 # Object Detection Model
