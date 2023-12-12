@@ -16,7 +16,7 @@ After cloning repo, navigating to root level and run:
 conda env create -f environment.yml
 conda activate streetwatch
 ```
-I'm not sure why, but on my last run through I found an issue where the dotenv and pillow packages that looks like:
+I'm not sure why, but on my final run through I found an issue where the dotenv and pillow packages fail to install from the environment.yml that looks like:
 ```
 ERROR: Could not find a version that satisfies the requirement torch (from versions: none)
 ERROR: No matching distribution found for torch
@@ -30,6 +30,7 @@ If this occurs do these two pip installs:
 pip install requests pillow
 pip install python-dotenv  
 ```
+Then move on.
 
 ### Credentials
 Store credentials in `.env` file and load using [python-dotenv](https://pypi.org/project/python-dotenv/).
