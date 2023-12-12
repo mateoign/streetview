@@ -44,7 +44,7 @@ or run this to see my individual python file
 ```
 python scripts/mateo.py
 ```
-
+You will see the images in the /data/images folder. If you want to see the images as they are saved there is an option in the mateo.py file to show each time you save an image.
 
 # Project Structure
 
